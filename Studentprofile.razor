@@ -1,0 +1,61 @@
+@page "/StudentProfile"
+@using System.ComponentModel.DataAnnotations
+
+<h2>Student Profile</h2>
+
+@if (student == null)
+{
+    <p>Loading profile...</p>
+}
+else
+{
+    <div class="profile-card">
+        <h3>@student.FullName</h3>
+        <p><strong>Email:</strong> @student.Email</p>
+        <p><strong>Phone:</strong> @student.Phone</p>
+        <p><strong>Date of Birth:</strong> @student.DateOfBirth.ToShortDateString()</p>
+        <p><strong>Address:</strong> @student.Address</p>
+    </div>
+}
+
+@code {
+    private StudentModel? student;
+
+    protected override void OnInitialized()
+    {
+        // Sample static data, replace with real service/database call
+        student = new StudentModel
+        {
+            FullName = "Priya Raman",
+            Email = "priya.raman@example.com",
+            Phone = "9876543210",
+            DateOfBirth = new DateTime(2003, 4, 12),
+            Address = "123, Main Street, Chennai, TN"
+        };
+    }
+
+    public class StudentModel
+    {
+        public string FullName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public DateTime DateOfBirth { get; set; }
+        public string Address { get; set; } = string.Empty;
+    }
+}
+
+<style>
+    .profile-card {
+        border: 1px solid #ccc;
+        padding: 1rem;
+        border-radius: 8px;
+        max-width: 400px;
+        background-color: #f9f9f9;
+    }
+    .profile-card h3 {
+        margin-bottom: 0.5rem;
+    }
+    .profile-card p {
+        margin: 0.3rem 0;
+    }
+</style>

@@ -1,0 +1,113 @@
+@page "/courses"
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.JSInterop
+
+@inject NavigationManager Navigation
+@inject IJSRuntime JSPS
+
+
+<h2>Course List</h2>
+
+@if (courses == null || courses.Count == 0)
+{
+    <p>No courses available.</p>
+}
+else
+{
+    <div class="course-list">
+        @foreach (var course in courses)
+        {
+            <div class="course-card">
+                <h4>@course.Title</h4>
+                <p><strong>Instructor:</strong> @course.Instructor</p>
+                <p><strong>Description:</strong> @course.Description</p>
+                <button @onclick="() => ViewDetails(course.Id)">View Details</button>
+            </div>
+        }
+    </div>
+}
+
+@* <button class="btn btn-secondary" @onclick="GoBack">Back</button>
+
+@code {
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/student-dashboard");
+    }
+} *@
+
+@inject IJSRuntime JS
+
+
+@code {
+    private async Task GoBack()
+    {
+        await JS.InvokeVoidAsync("history.back");
+    }
+}
+
+
+    
+@code {
+    private List<Coursemodel> courses = new();
+
+    protected override void OnInitialized()
+    {
+        // Mock data; replace with API call or DB fetch if needed
+        courses = new List<Coursemodel>
+        {
+            new Coursemodel { Id = 1, Title = "Math 101", Instructor = "Mr. Ram", Description = "Basic Algebra and Geometry." },
+            new Coursemodel { Id = 2, Title = "Science 101", Instructor = "Ms. Priya", Description = "Introduction to Physics and Chemistry." },
+            new Coursemodel { Id = 3, Title = "English Literature", Instructor = "Dr. Kumar", Description = "Shakespeare and modern poets." },
+            new Coursemodel { Id = 4, Title = "History ", Instructor = "Dr. Rajan", Description = "Art Hsitpry and Culture History." }
+        };
+    }
+
+    private void ViewDetails(int courseId)
+    {
+        // Navigate to course details (you can implement /course-details/{id} page)
+        NavigationManager.NavigateTo($"/course-details/{courseId}");
+    }
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+
+    public class Coursemodel
+    {
+        public int Id { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Instructor { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+    }
+}
+
+<style>
+    .course-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    .course-card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 1rem;
+        width: 300px;
+        background-color: #f9f9f9;
+    }
+    .course-card h4 {
+        margin-top: 0;
+    }
+    .course-card button {
+        margin-top: 0.5rem;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .course-card button:hover {
+        background-color: #0056b3;
+    }
+</style>
