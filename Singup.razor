@@ -1,0 +1,37 @@
+@page "/signup"
+@inject UserService UserService
+@inject NavigationManager Navigation
+@using Microsoft.AspNetCore.Components.Forms
+@rendermode InteractiveServer
+
+<h3>Sign Up</h3>
+
+<EditForm Model="@newUser" OnValidSubmit="HandleSignup">
+    <InputText @bind-Value="newUser.Username" placeholder="Username" class="form-control mb-2" />
+    <InputText @bind-Value="newUser.Password" type="password" placeholder="Password" class="form-control mb-2" />
+    <button class="btn btn-success">Register</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <p class="text-danger">@message</p>
+}
+
+@code {
+    private User newUser = new();
+    private string message = string.Empty;
+
+    private async Task HandleSignup()
+    {
+        var success = await UserService.Register(newUser);
+        if (success)
+        {
+            message = string.Empty;
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            message = "Username already exists.";
+        }
+    }
+}

@@ -1,0 +1,45 @@
+@page "/student-dashboard"
+@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthProvider
+
+@using Management.Components.Layout
+@layout MainLayout
+
+<h2>Student Dashboard</h2>
+
+<div class="dashboard-container">
+    <p>Welcome, student! You have successfully logged in.</p>
+
+    <ul>
+        <li><a href="/StudentProfile">Profile</a></li>
+        <li><a href="/courses">View Courses</a></li>
+        <li><a href="/StudentGradeReport">Reports </a></li>
+        
+    </ul>
+</div>
+
+
+@* <AuthorizeView>
+    <Authorized>
+        <h2>Welcome to the Student Dashboard</h2>
+        <!-- Put your dashboard content here -->
+    </Authorized>
+
+    <NotAuthorized>
+        <p>You are not authorized. Redirecting to login...</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity?.IsAuthenticated ?? true)
+        {
+            Navigation.NavigateTo("/login", forceLoad: true);
+        }
+    }
+} *@

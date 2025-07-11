@@ -1,0 +1,38 @@
+@page "/"
+@inject UserService UserService
+@inject NavigationManager Navigation
+@using Microsoft.AspNetCore.Components.Forms
+@rendermode InteractiveServer
+
+<h3>Login</h3>
+
+<EditForm Model="@loginUser" OnValidSubmit="HandleLogin">
+    <InputText @bind-Value="loginUser.Username" placeholder="Username" class="form-control mb-2" />
+    <InputText @bind-Value="loginUser.Password" type="password" placeholder="Password" class="form-control mb-2" />
+    <button class="btn btn-primary">Login</button>
+    <button class="btn btn-success" @onclick='() => Navigation.NavigateTo("/signup")'>Register</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <p class="text-danger">@error</p>
+}
+
+@code {
+    private User loginUser = new();
+    private string error = string.Empty;
+
+    private async Task HandleLogin()
+    {
+        var success = await UserService.Login(loginUser.Username, loginUser.Password);
+        if (success)
+        {
+            error = string.Empty;
+            Navigation.NavigateTo("/student-dashboard");
+        }
+        else
+        {
+            error = "Invalid username or password.";
+        }
+    }
+}
